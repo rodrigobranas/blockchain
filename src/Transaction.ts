@@ -13,7 +13,6 @@ export default class Transaction {
 	}
 
 	sign (signature: string) {
-		const hashTx = this.calculateHash();
 		this.signature = signature;
 	}
 

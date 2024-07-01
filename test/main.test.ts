@@ -28,3 +28,11 @@ test("Should test the blockchain", function () {
 	expect(branasCoin.getBalanceOfAddress(walletC.publicKey)).toBe(100);
 	expect(branasCoin.isValid()).toBe(true);
 });
+
+test("Should test wallet recover", function () {
+	const walletA = Wallet.setup();
+	const walletB = Wallet.restore(walletA.seed);
+	console.log("walletA", walletA);
+	console.log("walletB", walletB);
+	expect(walletA.privateKey).toBe(walletB.privateKey);
+});

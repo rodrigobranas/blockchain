@@ -1,17 +1,30 @@
-import { ec as EC } from "elliptic";
 import Transaction from "./Transaction";
+import * as bip39 from "bip39";
+import { ec as EC } from "elliptic";
 const ec = new EC("secp256k1");
 
 export default class Wallet {
 
-	constructor (readonly key: EC.KeyPair, private privateKey: string, readonly publicKey: string) {
+	constructor (readonly key: EC.KeyPair, readonly seed: string, readonly privateKey: string, readonly publicKey: string) {
 	}
 
 	static setup () {
-		const key = ec.genKeyPair();
+		const seed = bip39.generateMnemonic();
+		const key = ec.genKeyPair({
+			entropy: seed
+		});
 		const privateKey = key.getPrivate("hex");
 		const publicKey = key.getPublic("hex");
-		return new Wallet(key, privateKey, publicKey);
+		return new Wallet(key, seed, privateKey, publicKey);
+	}
+
+	static restore (seed: string) {
+		const key = ec.genKeyPair({
+			entropy: seed
+		});
+		const privateKey = key.getPrivate("hex");
+		const publicKey = key.getPublic("hex");
+		return new Wallet(key, seed, privateKey, publicKey);
 	}
 
 	sign (transaction: Transaction) {

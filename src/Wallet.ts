@@ -10,6 +10,7 @@ export default class Wallet {
 
 	static setup () {
 		const seed = bip39.generateMnemonic();
+		console.log(seed);
 		const key = ec.genKeyPair({
 			entropy: seed
 		});
